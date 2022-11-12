@@ -1,0 +1,25 @@
+syntax =  "proto3";
+
+package exam;
+
+option go_package = "github.com/JairDavid/go-grpc-intro;exampb";
+
+
+message Exam{
+    string id = 1;
+    string name = 2;
+}
+
+message SetExamResponse{
+    string id =1;
+    string name = 2;
+}
+
+message GetExamRequest{
+    string id = 1;
+}
+
+service ExamService{
+    rpc GetExam(GetExamRequest) returns (Exam);
+    rpc SetExam(Exam) returns(SetExamResponse);
+}
