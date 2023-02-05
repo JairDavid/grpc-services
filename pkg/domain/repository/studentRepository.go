@@ -2,8 +2,7 @@ package repository
 
 import (
 	"context"
-
-	"github.com/JairDavid/go-grpc-intro/domain"
+	"github.com/JairDavid/go-grpc-intro/pkg/domain"
 )
 
 var implementationStudent StudentRepository

@@ -1,11 +1,10 @@
-package studentserverconfig
+package serverConfig
 
 import (
 	"context"
-
-	"github.com/JairDavid/go-grpc-intro/domain"
-	"github.com/JairDavid/go-grpc-intro/repository"
-	"github.com/JairDavid/go-grpc-intro/studentpb"
+	"github.com/JairDavid/go-grpc-intro/pkg/domain"
+	"github.com/JairDavid/go-grpc-intro/pkg/domain/repository"
+	"github.com/JairDavid/go-grpc-intro/pkg/domain/studentpb"
 )
 
 type Server struct {

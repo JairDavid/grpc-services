@@ -1,12 +1,13 @@
 package main
 
 import (
+	"github.com/JairDavid/go-grpc-intro/pkg/domain/studentpb"
+	"github.com/JairDavid/go-grpc-intro/pkg/infrastructure/persistence"
+	studentserverconfig "github.com/JairDavid/go-grpc-intro/pkg/serverConfig"
 	"log"
 	"net"
 
 	"github.com/JairDavid/go-grpc-intro/database"
-	studentserverconfig "github.com/JairDavid/go-grpc-intro/studentServerConfig"
-	"github.com/JairDavid/go-grpc-intro/studentpb"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
@@ -17,13 +18,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	repo, err := database.NewPostgresRepository()
+	database.Connect()
+	//repo, err := database.New()
 
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	server := studentserverconfig.NewStudentServer(repo)
+	server := studentserverconfig.NewStudentServer(persistence.New(database.GetConnection()))
 
 	s := grpc.NewServer()
 	studentpb.RegisterStudentServiceServer(s, server)
