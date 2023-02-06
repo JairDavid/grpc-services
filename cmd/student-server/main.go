@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/JairDavid/go-grpc-intro/pkg/domain/studentpb"
 	"github.com/JairDavid/go-grpc-intro/pkg/infrastructure/persistence"
-	studentserverconfig "github.com/JairDavid/go-grpc-intro/pkg/serverConfig"
+	serverconfig "github.com/JairDavid/go-grpc-intro/pkg/serverConfig"
 	"log"
 	"net"
 
@@ -20,7 +20,7 @@ func main() {
 
 	database.Connect()
 
-	server := studentserverconfig.NewStudentServer(persistence.New(database.GetConnection()))
+	server := serverconfig.NewStudentServer(persistence.New(database.GetConnection()))
 
 	s := grpc.NewServer()
 	studentpb.RegisterStudentServiceServer(s, server)

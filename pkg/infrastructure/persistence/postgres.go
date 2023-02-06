@@ -7,17 +7,17 @@ import (
 	"github.com/JairDavid/go-grpc-intro/pkg/domain/repository"
 )
 
-type StudentRepositoryImp struct {
+type RepositoryImp struct {
 	db *sql.DB
 }
 
-func New(conn *sql.DB) repository.StudentRepository {
-	return &StudentRepositoryImp{
+func New(conn *sql.DB) repository.Repository {
+	return &RepositoryImp{
 		db: conn,
 	}
 }
 
-func (repo *StudentRepositoryImp) SetStudent(ctx context.Context, student *domain.Student) error {
+func (repo *RepositoryImp) SetStudent(ctx context.Context, student *domain.Student) error {
 	_, err := repo.db.ExecContext(ctx, "INSERT INTO student (id, name, age) VALUES ($1,$2,$3)", student.Id, student.Name, student.Age)
 	if err != nil {
 		return err
@@ -25,20 +25,39 @@ func (repo *StudentRepositoryImp) SetStudent(ctx context.Context, student *domai
 	return nil
 }
 
-func (repo *StudentRepositoryImp) GetStudent(ctx context.Context, id string) (*domain.Student, error) {
+func (repo *RepositoryImp) GetStudent(ctx context.Context, id string) (*domain.Student, error) {
 	var studentModel domain.Student
-	rows, err := repo.db.QueryContext(ctx, "SELECT * FROM student WHERE id = $1", id)
+	err := repo.db.QueryRowContext(ctx, "SELECT * FROM student WHERE id = ?", id).Scan(studentModel.Id, studentModel.Name, studentModel.Age)
 	if err != nil {
 		return nil, err
 	}
 
-	defer rows.Close()
-	for rows.Next() {
-		err := rows.Scan(&studentModel.Id, &studentModel.Name, &studentModel.Age)
-		if err != nil {
-			return nil, err
-		}
-		return &studentModel, nil
-	}
 	return &studentModel, nil
+
+}
+
+func (repo *RepositoryImp) GetExam(ctx context.Context, id string) (*domain.Exam, error) {
+	var examModel domain.Exam
+	err := repo.db.QueryRowContext(ctx, "SELECT  * FROM exam WHERE id = ?", id).Scan(examModel.Id, examModel.Name)
+	if err != nil {
+		return nil, err
+	}
+
+	return &examModel, nil
+}
+
+func (repo *RepositoryImp) SetExam(ctx context.Context, exam *domain.Exam) error {
+	_, err := repo.db.ExecContext(ctx, "INSERT INTO exam (id, name) VALUES ($1,$2)", exam.Id, exam.Name)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (repo *RepositoryImp) SetQuestion(ctx context.Context, question *domain.Question) error {
+	_, err := repo.db.ExecContext(ctx, "INSERT INTO question (id, answer,question,exam_id) VALUES ($1,$2,$3,$4)", question.Id, question.Answer, question.Question, question.ExamId)
+	if err != nil {
+		return err
+	}
+	return nil
 }

@@ -1,8 +1,20 @@
-DROP DATABASE IF EXISTS students;
+DROP DATABASE IF EXISTS school;
 
-CREATE TABLE(
+CREATE TABLE student(
 id varchar(32) PRIMARY KEY,
 name varchar(50) NOT NULL,
 age INTEGER NOT NULL
 );
 
+CREATE TABLE exam(
+    id varchar(32) PRIMARY KEY,
+    name varchar(50) NOT NULL
+);
+
+CREATE TABLE question(
+    id varchar(21) PRIMARY KEY,
+    answer varchar (60) NOT NULL,
+    question varchar (60) NOT NULL,
+    exam_id varchar(32) NOT NULL,
+    FOREIGN KEY (exam_id) REFERENCES exam(id)
+);

@@ -8,7 +8,7 @@ import (
 var conn *sql.DB
 
 func Connect() {
-	db, err := sql.Open("postgres", "postgres://postgres:root@localhost:5432/students?sslmode=disable")
+	db, err := sql.Open("postgres", "postgres://postgres:root@localhost:5432/school?sslmode=disable")
 	if err != nil {
 		panic(err)
 	}
