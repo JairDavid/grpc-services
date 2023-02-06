@@ -19,7 +19,6 @@ func main() {
 	}
 
 	database.Connect()
-	//repo, err := database.New()
 
 	server := studentserverconfig.NewStudentServer(persistence.New(database.GetConnection()))
 
