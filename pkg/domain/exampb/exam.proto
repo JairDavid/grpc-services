@@ -1,8 +1,10 @@
 syntax =  "proto3";
 
+import "pkg/domain/studentpb/student.proto";
+
 package exam;
 
-option go_package = "github.com/JairDavid/go-grpc-intro;exampb";
+option go_package = "github.com/JairDavid/go-grpc-intro/pkg/domain/exampb";
 
 
 message Exam{
@@ -30,8 +32,19 @@ message SetQuestionResponse{
     bool ok = 1;
 }
 
+message EnrollmentRequest{
+    string student_id = 1;
+    string exam_id = 2;
+}
+
+message GetStudentsPerExamRequest{
+    string exam_id = 1;
+}
+
 service ExamService{
     rpc GetExam(GetExamRequest) returns (Exam);
     rpc SetExam(Exam) returns(SetExamResponse);
     rpc SetQuestions(stream Question) returns (SetQuestionResponse);
+    rpc SetEnrollStudents(stream EnrollmentRequest) returns (SetQuestionResponse);
+    rpc GetStudentsPerExam(stream GetStudentsPerExamRequest) returns (stream student.Student);
 }

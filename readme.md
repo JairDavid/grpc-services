@@ -1,17 +1,29 @@
 ## GRPC Services
-This repository contains 4 grpc services for learning purposes to understand how microservices work and the alternative (GRPC) instead of using message brokers like RabbitMQ or Kafka for microservices communication.
+This repository contains 2 grpc services for learning purposes, it's just for understand how protocol buffers works
 * Student service (unary)
   * Get students
   * Create students
 * Exam service (unary)
   * Get exams
   * Create exams
-* Question service (bidirectional)
-  * Get questions by exams
-  * Create questions for exams (streaming)
-* Enrollment service (bidirectional)
-  * Get enrollments by exams
-  * Enroll student to exam
+    - Question section (bidirectional)
+      * Get questions by exams
+      * Create questions for exams (streaming)
+    - Enrollment section (bidirectional)
+      * Get enrollments by exams
+      * Enroll student to exam
 
-## What the services look like:
-![GRPC Services](https://user-images.githubusercontent.com/67834146/216883949-b9f1d975-196d-48c9-af7a-e55b0621f256.png)
+## What the services look like (hypothetical gateway):
+![GRPC Services (1)](https://user-images.githubusercontent.com/67834146/234155210-d43e971e-dbea-4005-bd14-431be1f36642.png)
+
+## Generate code from proto files:
+```bash
+make gen
+```
+
+## Running both services
+* Student service (unary)
+* Exam service (unary, bidirectional, streaming)
+```bash
+make up
+```

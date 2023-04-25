@@ -5,6 +5,7 @@ import (
 	"github.com/JairDavid/go-grpc-intro/pkg/domain"
 	"github.com/JairDavid/go-grpc-intro/pkg/domain/exampb"
 	"github.com/JairDavid/go-grpc-intro/pkg/domain/repository"
+	"github.com/JairDavid/go-grpc-intro/pkg/domain/studentpb"
 	"io"
 )
 
@@ -67,4 +68,45 @@ func (s *ExamServer) SetQuestions(stream exampb.ExamService_SetQuestionsServer) 
 		}
 	}
 
+}
+
+func (e *ExamServer) SetEnrollment(stream exampb.ExamService_SetEnrollStudentsServer) error {
+	for {
+		msg, err := stream.Recv()
+		if err == io.EOF {
+			return stream.SendAndClose(&exampb.SetQuestionResponse{Ok: true})
+		}
+		if err != nil {
+			return err
+		}
+
+		enrollment := &domain.Enrollment{
+			StudentId: msg.GetStudentId(),
+			ExamId:    msg.GetExamId(),
+		}
+		err = e.repository.SetEnrollment(context.Background(), enrollment)
+		if err != nil {
+			return stream.SendAndClose(&exampb.SetQuestionResponse{Ok: false})
+		}
+	}
+}
+
+func (e *ExamServer) GetStudentPerExam(req *exampb.EnrollmentRequest, stream exampb.ExamService_GetStudentsPerExamServer) error {
+	students, err := e.repository.GetStudentPerExam(context.Background(), req.GetExamId())
+	if err != nil {
+		return err
+	}
+
+	for _, student := range students {
+		student := &studentpb.Student{
+			Id:   student.Id,
+			Name: student.Name,
+			Age:  student.Age,
+		}
+		err := stream.Send(student)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

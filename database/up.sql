@@ -18,3 +18,10 @@ CREATE TABLE question(
     exam_id varchar(32) NOT NULL,
     FOREIGN KEY (exam_id) REFERENCES exam(id)
 );
+
+CREATE TABLE enrollment(
+    exam_id varchar(32) NOT NULL,
+    student_id varchar(32) NOT NULL,
+    FOREIGN KEY (exam_id) REFERENCES exam(id),
+    FOREIGN KEY (student_id) REFERENCES student(id)
+)

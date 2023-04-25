@@ -13,6 +13,8 @@ type Repository interface {
 	GetExam(ctx context.Context, id string) (*domain.Exam, error)
 	SetExam(ctx context.Context, exam *domain.Exam) error
 	SetQuestion(ctx context.Context, question *domain.Question) error
+	SetEnrollment(ctx context.Context, enrollment *domain.Enrollment) error
+	GetStudentPerExam(ctx context.Context, examId string) ([]domain.Student, error)
 }
 
 func NewStudentRepository(repo Repository) {
@@ -37,4 +39,12 @@ func SetExam(ctx context.Context, exam *domain.Exam) error {
 
 func SetQuestion(ctx context.Context, question *domain.Question) error {
 	return implementation.SetQuestion(ctx, question)
+}
+
+func SetEnrollment(ctx context.Context, enrollment *domain.Enrollment) error {
+	return implementation.SetEnrollment(ctx, enrollment)
+}
+
+func GetStudentPerExam(ctx context.Context, examId string) ([]domain.Student, error) {
+	return implementation.GetStudentPerExam(ctx, examId)
 }
